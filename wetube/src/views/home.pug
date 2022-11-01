@@ -1,14 +1,9 @@
 extends base.pug
+include mixins/video
 
 block content 
     h1 Welcome here you will see the trending Videos
-    each video in videos
-        div
-            h1=video.title
-            ul 
-                li #{video.rating}/5
-                li #{video.comments} comments 
-                li Posted #{video.createdAt}
-                li #{video.views} views.
+    each potato in videos
+        +video(potato)
     else
         div Sorry nothing found. 
