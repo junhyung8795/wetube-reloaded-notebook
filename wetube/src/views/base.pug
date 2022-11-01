@@ -1,26 +1,9 @@
 doctype html 
 html(lang="ko")
-<<<<<<< HEAD
     include partials/head.pug
-    body 
+    body  
         header 
-            if fakeUser.loggedIn 
-                small Hello #{fakeUser.username}
-            nav
-                ul
-                    if fakeUser.loggedIn
-                        li 
-                            a(href="/logout") Logout 
-                    else 
-                        li 
-                           a(href="/login") Login  
+            h1=pageTitle
         main
-=======
-    head 
-        link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css") 
-        title #{pageTitle} | Wetube 
-    body 
-        main 
->>>>>>> main
             block content
     include partials/footer.pug
