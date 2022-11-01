@@ -1,7 +1,18 @@
 doctype html 
 html(lang="ko")
-    head 
-        title #{pageTitle} | Wetube 
+    include partials/head.pug
     body 
-        block content
+        header 
+            if fakeUser.loggedIn 
+                small Hello #{fakeUser.username}
+            nav
+                ul
+                    if fakeUser.loggedIn
+                        li 
+                            a(href="/logout") Logout 
+                    else 
+                        li 
+                           a(href="/login") Login  
+        main
+            block content
     include partials/footer.pug
