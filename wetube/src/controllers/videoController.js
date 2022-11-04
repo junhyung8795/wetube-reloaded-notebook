@@ -1,8 +1,4 @@
 
-export const trending = (req, res) => {
-    return res.render("home", {pageTitle: "Home", videos})
-};
-
 let videos = [
     {
         title: "First Video",
@@ -29,6 +25,10 @@ let videos = [
         id:3,
     },
 ];
+export const trending = (req, res) => {
+    console.log(videos);
+    return res.render("home", {pageTitle: "Home", videos})
+};
 
 export const watch =(req, res) => {
     const id = req.params.id;/*get의 request로부터 id를 받고*/
@@ -51,4 +51,22 @@ export const postEdit= (req, res) => {
     return res.redirect(`/videos/${id}`);
 }
 
+export const getUpload = (req, res) => {
+    return res.render("upload", {pageTitle: "Upload Video"});
+}
+
+export const postUpload = (req, res) => {
+//here we will add a video to the videos array
+    const {title}= req.body;
+    const newVideo={
+        title: title,//title이라고만 써도 작동가능
+        rating: 0,
+        comments:0,
+        createdAt:"2 minutes ago",
+        views: 0 ,
+        id:videos.length+1,
+    }
+    videos.push(newVideo);
+    return res.redirect("/")
+}
 
