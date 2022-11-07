@@ -1,10 +1,12 @@
 import Video from "../models/Video";
 
 export const home = (req, res) => {
+    console.log("Starting Search")
     Video.find({}, (error, videos)=> {
-
-    });//Video model로 하여금 찾을 대상을 {}로 정의하고 callback함수로  error와 document(videos라는이름으로)을 수신하여 함수를 실행한다.
-    return res.render("home", {pageTitle: "Home"})
+       console.log("Search Finished");
+    });//Video model(database)안에서 정보를 찾는 "find",Video model로 하여금 찾을 대상을 {}로 정의하고 callback함수로  error와 document(videos라는이름으로)을 수신하여 함수를 실행한다.
+    console.log("I should be the last one");
+    return res.render("home", {pageTitle: "Home", videos:[] })
 };
 
 export const watch =(req, res) => {
