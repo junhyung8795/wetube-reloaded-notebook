@@ -5,7 +5,7 @@ const videoSchema = new mongoose.Schema({
     title: String,
     description: String,
     createdAt: Date,
-    hastags: [{type:String}],
+    hashtags: [ { type:String } ],
     meta: {
         views: Number,
         rating: Number,
