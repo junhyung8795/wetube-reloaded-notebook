@@ -7,12 +7,11 @@ export const home = async(req, res) => {
     return res.render("home", {pageTitle: "Home", videos })
 };
 
-export const watch =(req, res) => {
+export const watch =async(req, res) => {
     const id = req.params.id;/*get의 request로부터 id를 받고*/
     /*const { id }= req.param도 똑같은 의미이다.*/ 
-    const video = videos[id-1];/*id를 통해 video를 받는다.
-    라우터애서 id를 받고-> 그 아이디를 request정보로 받고 -> 그 id로 video가 어떤애인지 배열에서 찾고 저장하는것*/
-    return res.render("watch", {pageTitle: `Watching`/*video라고만써도됨 video라는 오브젝트 그대로 보낸다는 의미*/});
+    const video= await Video.findById(id);//Video모델안에서 id를 통해서 특정 비디오를 검색해서 가져옴
+    return res.render("watch", {pageTitle: video.title, video/*video라고만써도됨 video라는 오브젝트 그대로 보낸다는 의미*/});
 }
 export const getEdit =(req, res) => {
     const {id}= req.params;
