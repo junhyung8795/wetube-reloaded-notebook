@@ -35,31 +35,19 @@ export const getUpload = (req, res) => {
 export const postUpload = async (req, res) => {
 //here we will add a video to the videos array
     const {title, description, hashtags}= req.body;
-    const video= new Video({
-        title,
-        description,
-        createdAt: Date.now(),
-        hashtags: hashtags.split(",").map((word)=>`#${word}`),
-        meta: {
-            views:0,
-            rating:0,
-        },
-    })
-    const dbVideo = await video.save();//video object를 db에 저장하고 javascript obj을 반환해서 dbVideo에 저장하고 dbVideo를 콘솔로그하는것 
-    console.log(dbVideo);
-    /*await Video.create({
-        title,
-        description,
-        createdAt: Date.now(),
-        hashtags: hashtags.split(",").map((word)=>`#${word}`),
-        meta: {
-            views:0,
-            rating:0,
-        },
-    })위와같이 쓰면 video.save의 역할도 동시에할 수 있다. 앞에 await도 잊지말아야한다. save가 promise계열 함수이기때문에 위에서 await video.save()를 
-    변수애 저장하지않아도 db에 저장은 가능하다. terminal 에 mongosh -> use wetube -> show collections를 하면 현재 document들의 묶음들을 볼 수 있는데,
-    이때 videos라고 뜨는 이유는 db의 이름이 원래 Video인데 Mongoose는 자동으로 모델을 찾고 해당 모델의 첫 대문자를 소문자로 바구고 's'를 붙인 뒤 컬렉션을
-    생성하기때문에 videos라고 뜬다. 모델명을 Tank라고 쓰면 컬렌션명은 tanks가 된다.*/
-    return res.redirect("/")
+    try{
+        await Video.create({
+            title,
+            description,
+            createdAt: Date.now(),//createdAt:"alal"라고 일부러 에러를 만든다면, createdAt은 Date를 받기때문에 영어가 들어갈 수 없어서 upload할때마다 무조건 에러가생김
+            hashtags: hashtags.split(",").map((word)=>`#${word}`),
+        });//await 되는 함수가 에러가 생기면 javascript는 코드를 더 실행하지않고 catch로감, catch가 없으면 계속 로딩만하고 멈춤상태가됨.
+        return res.redirect("/")
+    } catch(error) {
+        console.log(error);
+        return res.render("upload", {pageTitle: "Upload Video", errorMessage: error._message,});
+    }//에러가 발생하면 upload페이지를 다시 만들음. 에러를 다루시 위해 try catch를 사용. console.log(error);를하면 error의 object가나오는데 그중 _message를 errorMessage로써 전달
+
+
 }
 
