@@ -26,14 +26,17 @@ export const getEdit =async (req, res) => {
 export const postEdit= async(req, res) => {
     const {id } = req.params;
     const {title, description, hashtags}= req.body;
-    const video= await Video.findById(id);
+    const video= await Video.exists({_id:id});
+    //Video모델(videos 컬렉션)안의 각 video obj의 _id와 parameter로 받은 id가 같은지 검사하여 boolean 반환
+    //exist함수는 filter를 받는데, 어떤조건이든가능하다.
+    //예를 들어 {title: "Hello"}라고하면 Hello라는 타이틀을가진 obj이있으면 true 없으면 false이다.
     if(!video) {
         return res.render("404", {pageTitle: "Video not Found."});
     }
-    video.title= title;
-    video.description=description;
-    video.hashtags= hashtags.split(",").map((word)=>word.startsWith("#") ? word: `#${word}`),
-    await video.save();
+    await Video.findByIdAndUpdate(id, {
+        title, description, hashtags:hashtags.split(",").map((word)=>word.startsWith("#") ? word: `#${word}`),
+    })
+    
     return res.redirect(`/videos/${id}`);
 }
 
