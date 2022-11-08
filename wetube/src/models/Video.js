@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+//export const formatHashtags = (hashtags) => {
+    //return hashtags.split(",").map((word)=> word.startsWith("#") ? word: `#${word}`);
+//} 각 hashtags들을 쪼개서 반환시키는 함수를 만들어 그 리턴값을 hashtags: {여기에 넣어도된다.}
 
 const videoSchema = new mongoose.Schema({
     title: {type: String, required:true, trim:true, maxLength:80},
@@ -14,9 +17,10 @@ const videoSchema = new mongoose.Schema({
         rating: {type:Number, default: 0,  required: true,},
     }
 })
-
-videoSchema.pre("save", async function(){
-    this.hashtags= this.hashtags[0].split(",").map((word)=>word.startsWith("#") ? word : `#${word}`);
+videoSchema.static("formatHashtags", function(hashtags){
+    return hashtags.split(",").map((word)=> word.startsWith("#") ? word: `#${word}`);
 })
+
+
 const Video = mongoose.model("Video", videoSchema);
 export default Video;
