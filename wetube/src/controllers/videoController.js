@@ -52,7 +52,7 @@ export const postUpload = async (req, res) => {
             title,
             description,
             //어차피 schema에서 default로 Date.now()를 주니 삭제함.
-            hashtags: hashtags.split(",").map((word)=>word.startsWith("#") ? word: `#${word}`),
+            hashtags,
         });//await 되는 함수가 에러가 생기면 javascript는 코드를 더 실행하지않고 catch로감, catch가 없으면 계속 로딩만하고 멈춤상태가됨.
         return res.redirect("/")
     } catch(error) {

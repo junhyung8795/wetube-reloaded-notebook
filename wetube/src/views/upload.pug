@@ -2,7 +2,7 @@ extends base.pug
 
 block content 
     if errorMessage
-        span=errorMessage// errorMessage가 있으면 errorMessage를 만들고 (ex)Video validation fail을 출력) 다시 밑에 있는 form을 render
+        span=errorMessage 
     form(method="POST")
         input(name="title", placeholder="Title", required, type="text", maxlength=80,) 
         input(name="description", placeholder="Description", required, type="text", minlength=20,) 
