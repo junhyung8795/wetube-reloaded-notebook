@@ -70,7 +70,17 @@ export const deleteVideo = async(req,res) => {
     return res.redirect("/");
 }
 
-export const search = (req, res) => {
-    const {keyword}= req.query;
-    return res.render("search", {pageTitle: "Search"});
+export const search = async(req, res) => {
+    const {keyword}= req.query; 
+    let videos=[]
+    if(keyword){
+        videos= await Video.find({
+            title: {
+                $regex: new RegExp(keyword, "i")//i는 대소문자 구분이 없다는 뜻, keyword를 포함하는 title검색
+                //$regex: new RegExp(`^${keyword}`, "i")이면 keyword로 '시작하는' title만 검색
+                //$regex: new RegExp(`^${keyword}`, "i")이면 keyword로 '끝나는' title만 검색
+            }
+        });
+    };
+    return res.render("search", {pageTitle: "Search", videos});
 }
