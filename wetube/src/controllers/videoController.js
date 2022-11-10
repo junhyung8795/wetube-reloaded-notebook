@@ -18,7 +18,7 @@ export const getEdit =async (req, res) => {
     const {id}= req.params;
     const video= await Video.findById(id);
     if(!video) {
-        return res.render("404", {pageTitle: "Video not Found."});
+        return res.status(400).render("404", {pageTitle: "Video not Found."});
     }
     return res.render("edit", {pageTitle : `Editing: ${video.title}`, video});
 };
@@ -57,7 +57,7 @@ export const postUpload = async (req, res) => {
         return res.redirect("/")
     } catch(error) {
         console.log(error);
-        return res.render("upload", {pageTitle: "Upload Video", errorMessage: error._message,});
+        return res.status(400).render("upload", {pageTitle: "Upload Video", errorMessage: error._message,});
     }//에러가 발생하면 upload페이지를 다시 만들음. 에러를 다루시 위해 try catch를 사용. console.log(error);를하면 error의 object가나오는데 그중 _message를 errorMessage로써 전달
 
 
