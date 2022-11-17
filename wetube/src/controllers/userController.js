@@ -49,8 +49,37 @@ export const postLogin = async(req,res)=> {
     req.session.user=user;
     return res.redirect("/");
 };
-export const edit = (req, res) => res.send("Edit User");
+export const getEditProfile = (req, res) => {
+    return res.render("editProfile", {pageTitle:"Edit Profile"});
+}
+
+export const postEditProfile= async(req, res) => {
+    const {
+        session: {
+          user: { _id , avatarUrl},
+        },
+        body: { name, email, username, location },
+        file
+      } = req;
+      console.log(file);
+      const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        { 
+          avatarUrl: file ? file.path : avatarUrl, //이때 파일을 아예 안보낼 때도 있을 수 있는데 아예 안보내면 undefined가 되고 express는 에러로 인식한다
+          name,     //그래서 file이 존재하면 file안에 있는 path로 정의하고 file이 없으면 이전에 쓰던 avatarUrl을 그대로 사용한다.
+          email,
+          username,
+          location,
+        },
+        { new: true }
+      );
+      req.session.user = updatedUser;
+      return res.redirect("/users/pro-file");
+    };
 export const remove = (req, res) => res.send("Remove User");
 export const see = (req, res) => res.send("See User");
-export const logout = (req, res) => res.send("Logout");
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+  };
 

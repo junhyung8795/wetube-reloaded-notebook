@@ -12,10 +12,16 @@ html(lang="ko")
                         a(href="/") Home
                     li 
                         a(href="/search") Search
-                    li 
-                        a(href="/join") Join!
-                    li 
-                        a(href="/login") login!
+                    if loggedIn
+                        li 
+                            a(href="/users/logout") Logout
+                        li 
+                            a(href="/users/pro-file") #{loggedInUser.name}'s profile
+                    else    
+                        li 
+                            a(href="/join") Join!
+                        li 
+                            a(href="/login") login!
         
         main
             block content
