@@ -1,6 +1,9 @@
 doctype html 
 html(lang="ko")
-    include partials/head.pug
+    head 
+    link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css") 
+    link(rel="stylesheet", href="/static/css/styles.css")
+    title #{pageTitle} | #{siteName}
     body  
         header 
             h1=pageTitle
@@ -28,4 +31,4 @@ html(lang="ko")
     include partials/footer.pug
     script(src="/static/js/main.js")
     //- 여기서는 서버상에서의 이름은 assets가 아닌 static으로 시작하므로(내용물이 assets인거지 url주소는 static으로 시작함)
-    //- 해당 파일을 가져올 때 위와같이 쓴다.
+    //- 해당 파일을 가져올 때 위와같이 쓴다. 사진도 서버상에서 볼 수 있게 허락한 url일 때 보이므로 여기도 이렇게 해야함.
