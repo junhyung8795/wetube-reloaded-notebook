@@ -2,7 +2,10 @@ const path= require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-    entry: "./src/client/js/main.js",//the file name that you wanna convert using webpack.
+    entry: {
+        main:"./src/client/js/main.js",
+        videoPlayer: "./src/client/js/videoPlayer.js",
+    },//the file name that you wanna convert using webpack.
     //webpack is a converter. Sometime google chrome can understand the javascript code that you write but other browsers cannot.
     //webpack can convert the code you write in ES6 for example, into the oldest code(오래된 문법).
     mode:"development",//여기서 mode는 "개발중" 이라고 써놓은 것. 이를 따로 설정하지않으면 default로 "production" 즉, "완성품"으로 코드를 변환하여 assets/js에 저장한다.
@@ -11,7 +14,7 @@ module.exports = {
         filename:"css/styles.css",//
     })],
     output : {
-        filename:"js/main.js",//path를 assets까지만 설정하고 파일내임에 각각 js와 css를 추가해서 각 js파일은 js폴더에 css파일은 css폴더에 둘수있다.
+        filename:"js/[name].js",//[name]이라고 하면 entry 오브젝트 안에 있는 name("main", "videoPlayer")을 받고 예를 들어 main이 name이면 ./src/client/js/main.js 엔트리에서 js/main.js로 output이 결정된다.
         path: path.resolve(__dirname,"assets",),//바꾸고자하는 파일을 변환한 후 어느파일에 저장할지 경로를 설정. path는 상대경로가 아닌 절대경로로 써야함(모든 경로를 다써야한다는 뜻).
         //__dirname은 User부터 wetube까지 모든 경로를 User/username/~~~/wetube까지 써놓은 변수이다. 자바스크립트가 글로벌 변수로 이미 설정한 변수임.
         clean:true,//clean은 webpack을 재시작할때마다(watch는 실행했을 당시의 파일들현황만 지켜봄, webpack에 변경사항있으면 다시시작해야함.)적용되고 이로인해 쓰이지않는 폴더,파일을 삭제함. 만약 파일내임이 xxxx/main.js이면 이전에 있던 js폴더를 없애고 새로 xxxx폴더를 만든다.

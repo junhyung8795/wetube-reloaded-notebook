@@ -3,8 +3,15 @@ extends base.pug
 block content 
     video(src="/" + video.fileUrl, controls)
     div
+        button#play Play
+        button#mute Mute
+        span#time 00:00/00:00
+        input(type="range", step="0.2", min="0", max="1")
+    div
         p=video.description
         small=video.createdAt
     a(href=`${video.id}/edit`) Edit Video! &rarr;
     a(href=`${video.id}/delete`) Delete Video! &rarr;
+block script 
+    script(src="/static/js/videoPlayer.js")
 
