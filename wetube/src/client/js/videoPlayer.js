@@ -40,17 +40,19 @@ const handleVolumeChange = (event) => {
     video.volume=value;
 }
 
+const formatTime = (seconds) => new Date(seconds * 1000).toISOString().substring(11, 19);
 
 const handleCurrentTime = () => {
-    currentTime.innerText = Math.floor(video.currentTime);
+    currentTime.innerText = formatTime(Math.floor(video.currentTime));
 }
 
 const handleTotalTime = () => {
-    totalTime.innerText = Math.floor(video.duration);
+    
+    totalTime.innerText = formatTime(Math.floor(video.duration));
 }
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadedmetadata", handleTotalTime);
+video.readyState ? handleTotalTime() : video.addEventListener("loadedmetadata", handleTotalTime);
 video.addEventListener("timeupdate", handleCurrentTime);
