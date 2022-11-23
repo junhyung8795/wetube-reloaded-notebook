@@ -1,3 +1,5 @@
+const { keys } = require("regenerator-runtime");
+
 const video = document.querySelector("video");
 const playBtn =document.getElementById("play");
 const playBtnIcon = playBtn.querySelector("i");
@@ -100,6 +102,16 @@ const handleMouseLeave = () => {
     //clearTimeout을 해줘야 cacel할 수 있다. setTimeout은 시행할때마다 매번 다른 id값을 return한다는걸 기억해야함.
 }
 
+const clickPlay = () => {
+    handlePlayClick();
+}
+
+const handleSpacebarPlay = (event) =>{
+    if(event.code === 'Space'){
+        handlePlayClick();
+    }
+} 
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -109,3 +121,5 @@ timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreenBtn);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
+video.addEventListener("click", clickPlay);
+window.addEventListener("keydown", handleSpacebarPlay);

@@ -5,6 +5,7 @@ module.exports = {
     entry: {
         main:"./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
+        recorder:"./src/client/js/recorder.js"
     },//the file name that you wanna convert using webpack.
     //webpack is a converter. Sometime google chrome can understand the javascript code that you write but other browsers cannot.
     //webpack can convert the code you write in ES6 for example, into the oldest code(오래된 문법).
