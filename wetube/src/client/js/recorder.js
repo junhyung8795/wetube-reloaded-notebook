@@ -3,9 +3,15 @@ const video = document.getElementById("preview");
 
 let stream;
 let recorder;
+let videoFile;
 
 const handleDownload = () => {
-
+    const a = document.createElement("a");
+    a.href=videoFile;
+    a.download= "Downloaded.webm";//anchor태크에는 href말고 download라는 기능이있는데 이는 링크를 클릭하면 해당 url로 이동시키는게아닌 해당 url을 
+    //저장할 수 있게 한다. 해당 url은 파일을 가리키고 있으므로 파일이 저장된다. 그리고 "Downloaded.webm"은 Downloaded라는 이름으로 저장하고 .webm이라는 동영상 확장자로 저장한다는 뜻이다.
+    document.body.appendChild(a);
+    a.click();
 };
 
 const handleStop = () => {
