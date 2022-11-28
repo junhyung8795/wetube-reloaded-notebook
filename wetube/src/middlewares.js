@@ -11,3 +11,19 @@ export const localsMiddleware = (req, res, next) => {
 
 export const avatarUploads = multer({ dest: "uploads/avatars/" });
 export const videoUploads = multer({ dest: "uploads/videos/" });
+
+export const protectorMiddleware = (req, res, next) => {
+    if (req.sessions.loggedIn) {
+        next();
+    } else {
+        return res.redirect("/login");
+    }
+}; //로그인된 유저만이 해당 url에 직접 접근하는걸 허가하는 middleware.
+
+export const publicOnlyMiddleware = () => {
+    if (!req.sessions.loggedIn) {
+        next();
+    } else {
+        return res.redirect("/");
+    }
+}; //로그인이 안된 유저만이 해당 url에 직접 접근하는걸 허가하는 middleware
