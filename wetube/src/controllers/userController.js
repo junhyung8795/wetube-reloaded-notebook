@@ -48,15 +48,14 @@ export const postLogin = async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     if (!user) {
-        res.status(400).render("login", {
+        return res.status(400).render("login", {
             pageTitle,
             errorMessage: "An accout with this username doesn't exist",
         });
     }
-    console.log(user.password);
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) {
-        res.status(400).render("login", {
+        return res.status(400).render("login", {
             pageTitle,
             errorMessage: "Wrong Password",
         });
@@ -77,7 +76,20 @@ export const postEditProfile = async (req, res) => {
         body: { name, email, username, location },
         file,
     } = req;
-    console.log(file);
+    if (
+        req.session.user.username !== username ||
+        req.session.user.email !== email
+    ) {
+        const exists = await User.exists({
+            $or: [{ username }, { email }],
+        });
+        if (exists) {
+            return res.render("editProfile", {
+                pageTitle: "Edit Profile",
+                errorMessage: "The same username or email already exists",
+            });
+        }
+    }
     const updatedUser = await User.findByIdAndUpdate(
         _id,
         {
