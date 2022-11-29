@@ -24,8 +24,11 @@ block content
     div
         p=video.description
         small=video.createdAt
-    a(href=`${video.id}/edit`) Edit Video! &rarr;
-    a(href=`${video.id}/delete`) Delete Video! &rarr;
+        small Uploaded by #{user.name}
+    if String(loggedInUser._id) === String(user._id)
+        a(href=`${video.id}/edit`) Edit Video! &rarr;
+        hr
+        a(href=`${video.id}/delete`) Delete Video! &rarr;
 block script 
     script(src="/static/js/videoPlayer.js")
 
