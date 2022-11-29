@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import Video from "../models/Video.js";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -151,7 +152,9 @@ export const see = async (req, res) => {
     if (!user) {
         return res.status(404).render("404", { pageTitle: "User not found." });
     }
-    return res.render("users/profile", { pageTitle: user.name, user });
+    const videos = await Video.find({ owner: user._id });
+    console.log(videos);
+    return res.render("users/profile", { pageTitle: user.name, user, videos });
 }; //유저의 프로필을 보기위한 페이지
 export const logout = (req, res) => {
     req.session.destroy();

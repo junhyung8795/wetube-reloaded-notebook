@@ -9,15 +9,14 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
     const id = req.params.id; /*get의 request로부터 id를 받고*/
     /*const { id }= req.param도 똑같은 의미이다.*/
-    const video = await Video.findById(id); //Video모델안에서 id를 통해서 특정 비디오를 검색해서 가져옴
+    const video = await Video.findById(id).populate("owner"); //Video모델안에서 id를 통해서 특정 비디오를 검색해서 가져옴
     if (!video) {
         return res.render("404", { pageTitle: "Video not Found." });
     }
-    const user = await User.findById(video.owner); //video에 owner를 통해 video의 주인의 _id를 받아 video 업로드한 사람 추적.
+    console.log(video);
     return res.render("watch", {
         pageTitle: video.title,
         video /*video라고만써도됨 video라는 오브젝트 그대로 보낸다는 의미*/,
-        user, //해당 유저의 정보를 받아옴.
     });
 };
 export const getEdit = async (req, res) => {
