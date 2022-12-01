@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import Video from "../models/Video.js";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
+
 export const postJoin = async (req, res) => {
     console.log(req.body);
     const { email, username, password, password2, location, name } = req.body;
@@ -39,9 +40,11 @@ export const postJoin = async (req, res) => {
         });
     }
 };
+
 export const getLogin = (req, res) => {
     return res.render("login", { pageTitle: "Login" });
 };
+
 export const postLogin = async (req, res) => {
     //check if account exists
     //check if password correct
@@ -65,6 +68,7 @@ export const postLogin = async (req, res) => {
     req.session.user = user;
     return res.redirect("/");
 };
+
 export const getEditProfile = (req, res) => {
     return res.render("editProfile", { pageTitle: "Edit Profile" });
 };
@@ -111,6 +115,7 @@ export const postEditProfile = async (req, res) => {
     //정상적인 작동이라 생각되기에 req.session.user = updatedUser;를 작성함.
     return res.redirect("/users/pro-file");
 };
+
 export const getChangePassword = (req, res) => {
     if (req.session.user.socialOnly === true) {
         return res.redirect("/");
@@ -119,6 +124,7 @@ export const getChangePassword = (req, res) => {
         pageTitle: "Change Password",
     });
 };
+
 export const postChangePassword = async (req, res) => {
     const {
         session: {
@@ -146,16 +152,17 @@ export const postChangePassword = async (req, res) => {
     return res.redirect("/users/logout");
 };
 export const remove = (req, res) => res.send("Remove User");
+
 export const see = async (req, res) => {
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("videos");
     if (!user) {
         return res.status(404).render("404", { pageTitle: "User not found." });
     }
-    const videos = await Video.find({ owner: user._id });
-    console.log(videos);
-    return res.render("users/profile", { pageTitle: user.name, user, videos });
+    console.log(user);
+    return res.render("users/profile", { pageTitle: user.name, user });
 }; //유저의 프로필을 보기위한 페이지
+
 export const logout = (req, res) => {
     req.session.destroy();
     return res.redirect("/");

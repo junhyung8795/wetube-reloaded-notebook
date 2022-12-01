@@ -57,7 +57,7 @@ export const postUpload = async (req, res) => {
     const { title, description, hashtags } = req.body;
     const { file } = req;
     try {
-        await Video.create({
+        const newVideo = await Video.create({
             title,
             description,
             fileUrl: file.path,
@@ -65,6 +65,9 @@ export const postUpload = async (req, res) => {
             hashtags: Video.formatHashtags(hashtags),
             owner: _id, //현재 로그인한 사람이 업로드를 한다면 업로드한 사람이 비디오의 주인이고 그 주인의 _id를 해당 비디오 모델에 ObjectId로써 저장하여 DB에서 해당 비디오의 주인을 찾을 수 있게함.
         }); //await 되는 함수가 에러가 생기면 javascript는 코드를 더 실행하지않고 catch로감, catch가 없으면 계속 로딩만하고 멈춤상태가됨.
+        const user = await User.findById(_id);
+        user.videos.push(newVideo._id);
+        user.save();
         return res.redirect("/");
     } catch (error) {
         console.log(error);
