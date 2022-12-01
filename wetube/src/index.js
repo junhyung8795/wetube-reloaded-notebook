@@ -3,7 +3,7 @@ import morgan from "morgan";
 import rootRouter from "./routers/rootRouter.js";
 import userRouter from "./routers/userRouter.js";
 import videoRouter from "./routers/videoRouter";
-import apiRouter from "./routers/apiRouter";
+import apiRouter from "./routers/apiRouter.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { localsMiddleware } from "./middlewares.js";
