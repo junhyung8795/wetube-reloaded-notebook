@@ -26,6 +26,7 @@ const handleSubmit = (event) => {
         //다시 말해, headers: { "Content-type": "application/json" }인 request만 express.json()을 실행한다.
         //index.js에서 app.use(express.json())을 하면 videoController에서 req.body를 통해 데이터접근이 가능하다.
     });
+    textarea.value = "";
 };
 
 if (form) {
