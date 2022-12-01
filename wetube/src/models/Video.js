@@ -26,6 +26,13 @@ const videoSchema = new mongoose.Schema({
         ref: "User",
     },
     fileUrl: { type: String, required: true },
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Comment",
+        },
+    ],
 });
 videoSchema.static("formatHashtags", function (hashtags) {
     return hashtags
