@@ -122,9 +122,9 @@ export const registerView = async (req, res) => {
     const { id } = req.params;
     const video = await Video.findById(id);
     if (!video) {
-        return res.status(404);
+        return res.sendStatus(404); //sendStatus 하면 status코드를 보냄과동시에 연결을 끝낼 수 있다.
     }
     video.meta.views = video.meta.views + 1;
     await video.save();
-    return res.status(200);
+    return res.sendStatus(200);
 };
