@@ -30,6 +30,9 @@ export const getEdit = async (req, res) => {
 
 export const postEdit = async (req, res) => {
     const { id } = req.params;
+    const {
+        user: { _id },
+    } = req.session;
     const { title, description, hashtags } = req.body;
     const video = await Video.exists({ _id: id });
     //Video모델(videos 컬렉션)안의 각 video obj의 _id와 parameter로 받은 id가 같은지 검사하여 boolean 반환
@@ -38,6 +41,9 @@ export const postEdit = async (req, res) => {
     if (!video) {
         return res.render("404", { pageTitle: "Video not Found." });
     }
+    if (String(video.owner) !== String(_id)) {
+        return res.status(403).redirect("/");
+    } //해당 비디오의 주인이 아닌 사람이 edit하는것을 백엔드 차원에서 방지. url만 똑같이 한다고해서 해당 영상을 편집하는 기능을 발현시키지않도록 보호.
     await Video.findByIdAndUpdate(id, {
         title,
         description,
@@ -67,7 +73,7 @@ export const postUpload = async (req, res) => {
         }); //await 되는 함수가 에러가 생기면 javascript는 코드를 더 실행하지않고 catch로감, catch가 없으면 계속 로딩만하고 멈춤상태가됨.
         const user = await User.findById(_id);
         user.videos.push(newVideo._id);
-        user.save();
+        user.save(); //이때 그냥 save만 하면 userSchema에서 presave에 의해 hash됐던 비밀번호가 한번 더 hash 되는데 이를 thsi.isModified로 비밀번호를 수정한 상태로 저장할때만 hash 되도록 UserModel파일에서 변경
         return res.redirect("/");
     } catch (error) {
         console.log(error);
@@ -80,8 +86,20 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res) => {
     const { id } = req.params;
-    console.log(id);
+    const {
+        user: { _id },
+    } = req.session;
+    const video = await Video.findById(id);
+    const user = await User.findById(_id);
+    if (String(video.owner) !== String(_id)) {
+        return res.status(403).redirect("/");
+    } //postEdit와 마찬가지로 해당 비디오의 주인이 아닌 사람이 delete하는것을 백엔드 차원에서 방지. url만 똑같이 한다고해서 해당 영상을 지우는 기능을 발현시키지않도록 보호.
+    if (!video) {
+        return res.render("404", { pageTitle: "Video not Found." });
+    }
     await Video.findByIdAndDelete(id);
+    user.videos.splice(user.videos.indexOf(id), 1); //
+    user.save(); //위줄과 이 줄의 의미는 해당 영상을 지우면 해당 영상의 owner인 user의 video array중에서도 삭제하고 이를 저장한다는 의미.
     return res.redirect("/");
 };
 
