@@ -10,11 +10,12 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
     const id = req.params.id; /*get의 request로부터 id를 받고*/
     /*const { id }= req.param도 똑같은 의미이다.*/
-    const video = await Video.findById(id).populate("owner"); //Video모델안에서 id를 통해서 특정 비디오를 검색해서 가져옴
+    const video = await Video.findById(id)
+        .populate("owner")
+        .populate("comments"); //Video모델안에서 id를 통해서 특정 비디오를 검색해서 가져옴
     if (!video) {
         return res.render("404", { pageTitle: "Video not Found." });
     }
-    console.log(video);
     return res.render("watch", {
         pageTitle: video.title,
         video /*video라고만써도됨 video라는 오브젝트 그대로 보낸다는 의미*/,
@@ -145,5 +146,7 @@ export const createComment = async (req, res) => {
         owner: user._id,
         video: id,
     });
+    video.comments.push(comment._id);
+    video.save();
     return res.sendStatus(201);
 };
