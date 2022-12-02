@@ -1,17 +1,23 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
+const commentDeleteBtn = document.querySelector(".comment-deleteBtn");
 
-const addComment = (text) => {
+const addComment = (text, id) => {
     const videoComments = document.querySelector(".video__comments ul");
     const newComment = document.createElement("li");
     const icon = document.createElement("i");
+    newComment.dataset.id = id;
     icon.className = "fas fa-comment";
     newComment.className = "video__comment";
     const span = document.createElement("span");
+    const span2 = document.createElement("span");
+    span2.innerText = "❌";
     span.innerText = ` ${text}`;
     newComment.appendChild(icon);
     newComment.appendChild(span);
+    newComment.appendChild(span2);
     videoComments.prepend(newComment);
+    span2.addEventListener("click", () => console.log("kk"));
 };
 
 const handleSubmit = async (event) => {
@@ -22,7 +28,8 @@ const handleSubmit = async (event) => {
     if (text === "") {
         return;
     }
-    const { status } = await fetch(`/api/videos/${videoId}/comment`, {
+    const response = await fetch(`/api/videos/${videoId}/comment`, {
+        //newCommentId는 백엔드에서 return res.status(201).json({ newCommetId: comment._id });이 코드에 의해 날아온 것이다.
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -38,10 +45,14 @@ const handleSubmit = async (event) => {
         //express.json()은 위와같이 JSON Stirng이 브라우저로 보내질 때, header에 Content-Type이 express.json()의 기본 값인 "application/json"과 일치하는 request만 미들웨어를 이용하여 Obj를 반환한다.
         //다시 말해, headers: { "Content-type": "application/json" }인 request만 express.json()을 실행한다.
         //index.js에서 app.use(express.json())을 하면 videoController에서 req.body를 통해 데이터접근이 가능하다.
-    });
-    textarea.value = "";
-    if (status === 201) {
-        addComment(text);
+    }); //videoController에서 response를 보낼 때 이 response를 fetch함수의 return값으로 받아올 수도 있다. 매우매우매우 중요.
+    console.log(typeof response);
+    if (response.status === 201) {
+        const rest = await response.json(); //response를 json화 시키면 {newCommetId: '6389b8f365ab3c6b28e30d15'}과 같이 되는데 obj형태니까 정보에 접근할 수 있게된다.
+        //response는 타입이 obj인데 이를 json형태로 해줘야함.
+        console.log(typeof rest); //rest의 타입도 object라고 나온다.
+        addComment(text, rest.newCommentId);
+        textarea.value = "";
     }
 };
 

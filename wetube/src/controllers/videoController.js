@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import cleanPositionalOperators from "mongoose/lib/helpers/schema/cleanPositionalOperators";
 
 export const home = async (req, res) => {
     const videos = await Video.find({}).sort({ createdAt: "desc" });
@@ -16,6 +17,7 @@ export const watch = async (req, res) => {
     if (!video) {
         return res.render("404", { pageTitle: "Video not Found." });
     }
+    console.log(video);
     return res.render("watch", {
         pageTitle: video.title,
         video /*video라고만써도됨 video라는 오브젝트 그대로 보낸다는 의미*/,
@@ -148,5 +150,6 @@ export const createComment = async (req, res) => {
     });
     video.comments.push(comment._id);
     video.save();
-    return res.sendStatus(201);
+    return res.status(201).json({ newCommentId: comment._id }); //status코드 201만 보내는게 아니라 frontend에(response에) newComment: comment._id라는 정보를 전달함.
+    //콘솔옆에 Network에 들어가서 해당 post request(여기서는 당연히 comment라는 이름으로)를 찾아 Response에 들어가면 { newCommetId: comment._id }와같은 obj가 들어와 있다.
 };
