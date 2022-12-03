@@ -2,6 +2,7 @@ import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import cleanPositionalOperators from "mongoose/lib/helpers/schema/cleanPositionalOperators";
+import { async } from "regenerator-runtime";
 
 export const home = async (req, res) => {
     const videos = await Video.find({}).sort({ createdAt: "desc" });
@@ -102,6 +103,7 @@ export const deleteVideo = async (req, res) => {
         return res.render("404", { pageTitle: "Video not Found." });
     }
     await Video.findByIdAndDelete(id);
+    console.log(user.videos.indexOf(id));
     user.videos.splice(user.videos.indexOf(id), 1); //
     user.save(); //위줄과 이 줄의 의미는 해당 영상을 지우면 해당 영상의 owner인 user의 video array중에서도 삭제하고 이를 저장한다는 의미.
     return res.redirect("/");
@@ -152,4 +154,30 @@ export const createComment = async (req, res) => {
     video.save();
     return res.status(201).json({ newCommentId: comment._id }); //status코드 201만 보내는게 아니라 frontend에(response에) newComment: comment._id라는 정보를 전달함.
     //콘솔옆에 Network에 들어가서 해당 post request(여기서는 당연히 comment라는 이름으로)를 찾아 Response에 들어가면 { newCommetId: comment._id }와같은 obj가 들어와 있다.
+};
+
+export const deleteComment = async (req, res) => {
+    const {
+        params: { id },
+        session: {
+            user: { _id },
+        },
+    } = req;
+    const comment = await Comment.findById(id).populate("video");
+    console.log(comment);
+    const videoId = comment.video._id;
+    const userId = comment.owner._id;
+    const video = await Video.findById(videoId).populate("comments");
+    const user = await User.findById(userId).populate("comments");
+
+    if (String(_id) !== String(userId)) {
+        return res.sendStatus(404);
+    }
+    if (!video) {
+        return res.sendStatus(404);
+    }
+    video.comments.splice(video.comments.indexOf(id), 1);
+    video.save();
+    await Comment.findByIdAndDelete(id);
+    return res.sendStatus(200);
 };

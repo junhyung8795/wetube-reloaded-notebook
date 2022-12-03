@@ -1,15 +1,45 @@
 .video__comments {
     display: flex;
     flex-direction: column;
-    max-width: 320px;
     width: 100%;
-    margin: 0 auto;
+    margin: 0px 50px 0px 0px;
     margin-top: 20px;
     .video__comment {
+        display: flex;
+        align-items: center;
+        width: 700px;
+        height: 100px;
         padding: 10px;
-        border-radius: 9999px;
-        background-color: white;
-        color: black;
+        background-color: transparent;
+        color: white;
         margin-bottom: 10px;
     }
+}
+
+.video__comment ul {
+    display: flex;
+}
+.video__comment i {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 10%;
+}
+.comment-text {
+    display: block;
+    justify-content: flex-start;
+    width: 560px;
+    word-wrap: break-word;
+}
+.comment-deleteBtn {
+    width: 10%;
+    justify-content: flex-end;
+}
+
+#commentForm {
+    height: 140px;
+}
+
+#commentForm textarea {
+    height: 60px;
 }
