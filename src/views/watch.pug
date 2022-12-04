@@ -1,0 +1,56 @@
+extends base.pug
+
+block content 
+    div#videoContainer(data-id=video._id) 
+        video(src="/" + video.fileUrl)
+        div#videoControls.videoControls
+            div.videoControls__play
+                span#play.videoControls__playBtn
+                    i.fas.fa-play
+                div.videoControls__time
+                    span#currentTime 00:00
+                    span  / 
+                    span#totalTime 00:00
+            input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
+            div.videoControls__volume
+                input(type="range",step="0.1", value=0.5, min="0", max="1")#volume
+                span#mute
+                    i.fas.fa-volume-up
+            div 
+                span#fullScreen
+                    i.fas.fa-expand
+           
+            
+    div
+        p=video.description
+        small=video.createdAt
+        small Uploaded by 
+            a(href=`/users/${video.owner._id}`) #{video.owner.name}
+        if String(loggedInUser._id) === String(video.owner._id)
+            a(href=`${video.id}/edit`) Edit Video! &rarr;
+            hr
+            a(href=`${video.id}/delete`) Delete Video! &rarr;
+    if loggedIn
+        div.video__add-comments
+            form.video__comment-form#commentForm
+                textarea(cols="30", rows="10", placeholder="Write a nice commment...")
+                button Add Comment
+    div.video__comments
+        ul 
+            each comment in video.comments.reverse()
+                li.video__comment(data-id=comment._id)
+                    i.fas.fa-comment
+                    span.comment-text  #{comment.text}
+                    if String(loggedInUser._id)===String(comment.owner) 
+                        span.comment-deleteBtn  ❌
+
+block script 
+    script(src="/static/js/videoPlayer.js")
+    script(src="/static/js/commentSection.js") 
+
+//- 위에 data attribute(data-id)를사용하였는데 이는 pug가 html element들을 만들때 특정 element에 커스텀데이터를 저장할 수 있는 방법이다.
+//- html에 정보를 저장해놓고 script로 연결된 videoPlayer.js에서 해당 html element에 접근하여 해당 정보를 사용하는것이 가능하다.
+//- 위같은 경우에는 data-id = video._id를 넣었는데 이를 통해 videoPlayer.js에서는 videoContainer.dataset.id로 해당 video의 id를 얻을 수 있는 것이다.
+//- videoPlayer.js에서 /api/videos/:id/view를 했을 때 :id부분에 videoContainer.dataset.id를 넣음으로써 해당 url로 fetch를 이용해서 post request를 보낼 수 있다.
+//- 위같이 하는 이유는 백엔드에서 작동하는 javascript인 videoController를 예로들면 id를 req.params 나 req.session을 통해 받는다고 치지만
+//- 프론트엔드에서 작동하는 javascript는 백엔드와 연결돼있지 않아 req 자체를 쓸 수 없기때문, 따라서 그나마 pug파일에서 script로 지정돼있으니 여기서 정보를 받아오는 것이다.

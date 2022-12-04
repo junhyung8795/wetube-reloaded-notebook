@@ -1,4 +1,5 @@
-
-wetube/uploads/avatars/
-
-wetube/uploads/videos/
+/node_modules
+.env
+/avatarUploads
+/assets
+/build
