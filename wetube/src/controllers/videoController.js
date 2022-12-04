@@ -18,7 +18,7 @@ export const watch = async (req, res) => {
     if (!video) {
         return res.render("404", { pageTitle: "Video not Found." });
     }
-    console.log(video);
+
     return res.render("watch", {
         pageTitle: video.title,
         video /*video라고만써도됨 video라는 오브젝트 그대로 보낸다는 의미*/,

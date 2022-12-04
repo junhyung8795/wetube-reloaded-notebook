@@ -12,8 +12,7 @@ module.exports = {
     }, //the file name that you wanna convert using webpack.
     //webpack is a converter. Sometime google chrome can understand the javascript code that you write but other browsers cannot.
     //webpack can convert the code you write in ES6 for example, into the oldest code(오래된 문법).
-    mode: "development", //여기서 mode는 "개발중" 이라고 써놓은 것. 이를 따로 설정하지않으면 default로 "production" 즉, "완성품"으로 코드를 변환하여 assets/js에 저장한다.
-    watch: true, //client css파일을 변경할때마다 "watch"함으로써 명령어 안쳐도 다시 실행되게끔함
+    //client css파일을 변경할때마다 "watch"함으로써 명령어 안쳐도 다시 실행되게끔함,그리고 development에서만 true로 실행돼야함.
     plugins: [
         new MiniCssExtractPlugin({
             filename: "css/styles.css", //
