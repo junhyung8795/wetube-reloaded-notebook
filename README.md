@@ -23,19 +23,33 @@ Wetube Reloaded Notebook은 Nomad Coders의 Wetube Reloaded 프로젝트를 기�
 
 폴더 구조
 wetube-reloaded-notebook/
+
 ├── src/
+
 │   ├── controllers/
+
 │   ├── db/
+
 │   ├── middlewares/
+
 │   ├── models/
+
 │   ├── routers/
+
 │   ├── views/
+
 │   └── ...
+
 ├── .gitignore
+
 ├── README.md
+
 ├── babel.config.json
+
 ├── nodemon.json
+
 ├── package.json
+
 └── webpack.config.js
 
 학습 내용
