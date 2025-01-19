@@ -1,7 +1,7 @@
 # Wetube Reloaded Notebook  
 Wetube Reloaded Notebook은 Nomad Coders의 Wetube Reloaded 프로젝트를 기반으로 제작됐습니다. 2022.10 ~ 2022.12 동안 유튜브 클론 6주 완성반에 참가한 결과물입니다.  
 이 프로젝트는 Node.js, Express, MongoDB, ES6 등을 활용하여 YouTube와 유사한 기능을 구현하였습니다.  
-학습 목적으로 진행되었으며, 각 커밋에는 학습한 내용이 상세하게 기록되어 있습니다.
+### 학습 목적으로 진행되었으며, 각 커밋에는 학습한 내용이 상세하게 기록되어 있습니다.
 
 ## 주요 기능  
 사용자 인증 및 관리: 회원 가입, 로그인, 프로필 수정, 로그아웃 등.  
